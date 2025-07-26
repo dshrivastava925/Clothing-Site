@@ -2,6 +2,10 @@ import os
 from datetime import datetime
 from typing import List, Optional, Dict, Any
 from bson import ObjectId
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables
+
 
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,8 +16,8 @@ from groq import Groq
 from db import db_manager, get_database
 
 # Configuration
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
-GROQ_MODEL = os.getenv("GROQ_MODEL", "mixtral-8x7b-32768")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GROQ_MODEL = os.getenv("GROQ_MODEL", "gemma2-9b-it")
 
 # Initialize Groq client
 groq_client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
@@ -69,7 +73,7 @@ async def health():
     except:
         return {"status": "unhealthy", "database": "disconnected"}
 
-@app.post("/chat", response_model=ChatResponse)
+@app.post("/api/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     """Main chat endpoint"""
     db = get_database()
