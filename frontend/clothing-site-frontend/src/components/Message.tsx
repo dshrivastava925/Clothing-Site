@@ -1,16 +1,24 @@
 import React from 'react';
-import { Message as MessageType } from '../types';
 
-export const Message: React.FC<{ message: MessageType }> = ({ message }) => (
-  <div
-    style={{
-      textAlign: message.role === 'user' ? 'right' : 'left',
-      background: message.role === 'user' ? '#e0f7fa' : '#f1f8e9',
-      margin: '4px 0',
-      padding: '8px',
-      borderRadius: '6px',
-    }}
-  >
-    <strong>{message.role === 'user' ? 'You' : 'AI'}:</strong> {message.content}
-  </div>
-);
+type MessageProps = {
+  sender: 'user' | 'ai';
+  text: string;
+};
+
+const Message: React.FC<MessageProps> = ({ sender, text }) => {
+  const isUser = sender === 'user';
+
+  return (
+    <div className={`my-2 flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+      <div
+        className={`px-4 py-2 rounded-xl max-w-[70%] break-words ${
+          isUser ? 'bg-green-700' : 'bg-gray-700'
+        }`}
+      >
+        {text}
+      </div>
+    </div>
+  );
+};
+
+export default Message;
